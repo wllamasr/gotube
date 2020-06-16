@@ -3,7 +3,9 @@ package users
 import (
 	"database/sql/driver"
 	"github.com/go-playground/validator/v10"
-	"github.com/jinzhu/gorm"
+	"github.com/wllamasr/golangtube/models"
+	"golang.org/x/crypto/bcrypt"
+	"time"
 )
 
 type role string
@@ -27,20 +29,37 @@ func (p role) Value() (driver.Value, error) {
 }
 
 type User struct {
-	gorm.Model
-	FirstName string `json:"firstname" validate:"required"`
-	LastName  string `json:"lastname" validate:"required"`
-	Email     string `json:"email" validate:"required,email"`
-	Password  string `json:"password" gorm:"default:'asd'" validate:"required"`
-	role      role   `json:"role" gorm:"default:'user'" sql:"type:ENUM('user', 'admin', 'moderator', 'support')"`
+	models.MainModel
+	FirstName                string `json:"firstname" validate:"required"`
+	LastName                 string `json:"lastname" validate:"required"`
+	Email                    string `json:"email" validate:"required,email" gorm:"type:varchar(100);unique_index"`
+	Password                 string `json:"password" gorm:"default:'asd'" validate:"required"`
+	Role                     role   `json:"role" gorm:"default:'user';size:255"`
+	EmailConfirmed           bool   `json:"email_confirmed" gorm:"default:false"`
+	EmailConfirmationToken   string `json:"email_confirmation_token"`
+	EmailConfirmationExpires time.Time
 }
 
-func (user *User) Validate() error {
-	validate = validator.New()
+func Hash(password string) ([]byte, error) {
+	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+}
 
-	if error := validate.Struct(user); error != nil {
-		return error
+func VerifyPassword(hashedPassword, password string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+}
+
+func (user *User) BeforeSave() error {
+	hashedPassword, err := Hash(user.Password)
+
+	if err != nil {
+		return err
 	}
 
+	user.Password = string(hashedPassword)
+	return nil
+}
+
+func (user *User) BeforeCreate() error {
+	user.EmailConfirmationExpires = time.Time.AddDate(0, 0, 3, 0)
 	return nil
 }

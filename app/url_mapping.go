@@ -5,5 +5,5 @@ import (
 )
 func mapUrls() {
 	router.GET("/ping", ping.Ping)
-	router.POST("/user", users.CreateUser)
+	router.POST("/api/register", users.CreateUser)
 }
