@@ -2,15 +2,12 @@ package users
 
 import (
 	"database/sql/driver"
-	"github.com/go-playground/validator/v10"
 	"github.com/wllamasr/golangtube/models"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )
 
 type role string
-
-var validate *validator.Validate
 
 const (
 	user      role = "user"
@@ -60,6 +57,6 @@ func (user *User) BeforeSave() error {
 }
 
 func (user *User) BeforeCreate() error {
-	user.EmailConfirmationExpires = time.Time.AddDate(0, 0, 3, 0)
+	user.EmailConfirmationExpires = user.EmailConfirmationExpires.AddDate(0, 0, 3)
 	return nil
 }
