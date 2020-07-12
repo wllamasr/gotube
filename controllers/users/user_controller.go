@@ -1,31 +1,34 @@
 package users
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/wllamasr/golangtube/config/database"
-	"github.com/wllamasr/golangtube/models/users"
+	"github.com/wllamasr/golangtube/config/db"
+	"github.com/wllamasr/golangtube/models"
+	"github.com/wllamasr/golangtube/utils"
 	"github.com/wllamasr/golangtube/utils/errors"
 	"net/http"
 )
 
 func CreateUser(c *gin.Context) {
-	var user users.User
+	var user models.User
 
-	if error := c.ShouldBindJSON(&user); error != nil {
+	if err := c.ShouldBindJSON(&user); err != nil {
 		restError := errors.BadRequestError("Invalid body JSON")
 		c.JSON(restError.Status, restError)
 		return
 	}
 
-	if error := user.Validate(); error != nil {
-		fmt.Println(error.Error())
-		restError := errors.BadRequestError(error.Error())
+	if err := utils.Validator(user); err != nil {
+		restError := errors.BadRequestError(err)
 		c.JSON(restError.Status, restError)
 		return
 	}
 
-	database.Client.Create(&user)
+	if err := db.Client.Create(&user).Error; err != nil {
+		restError := errors.BadRequestError(err.Error())
+		c.JSON(restError.Status, restError)
+		return
+	}
 
 	c.JSON(http.StatusOK, user)
 }

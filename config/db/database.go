@@ -1,10 +1,10 @@
-package database
+package db
 
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/wllamasr/golangtube/models/users"
+	"github.com/wllamasr/golangtube/models"
 	"os"
 )
 
@@ -36,5 +36,5 @@ func LoadClient() {
 }
 
 func migrateDatabase() {
-	Client.AutoMigrate(&users.User{})
+	Client.AutoMigrate(&models.User{})
 }

@@ -3,7 +3,7 @@ package app
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"github.com/wllamasr/golangtube/config/database"
+	"github.com/wllamasr/golangtube/config/db"
 )
 
 var (
@@ -12,10 +12,10 @@ var (
 
 func init() {
 	_ = godotenv.Load()
-	database.LoadClient()
+	db.LoadClient()
 }
 
 func StartApplication() {
 	mapUrls()
-	router.Run(":8080")
+	_ = router.Run(":8080")
 }

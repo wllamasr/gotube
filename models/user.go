@@ -1,8 +1,7 @@
-package users
+package models
 
 import (
-	"database/sql/driver"
-	"github.com/wllamasr/golangtube/models"
+	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )
@@ -16,17 +15,8 @@ const (
 	support   role = "support"
 )
 
-func (p *role) Scan(value interface{}) error {
-	*p = role(value.([]byte))
-	return nil
-}
-
-func (p role) Value() (driver.Value, error) {
-	return string(p), nil
-}
-
 type User struct {
-	models.MainModel
+	gorm.Model
 	FirstName                string `json:"firstname" validate:"required"`
 	LastName                 string `json:"lastname" validate:"required"`
 	Email                    string `json:"email" validate:"required,email" gorm:"type:varchar(100);unique_index"`
@@ -35,14 +25,15 @@ type User struct {
 	EmailConfirmed           bool   `json:"email_confirmed" gorm:"default:false"`
 	EmailConfirmationToken   string `json:"email_confirmation_token"`
 	EmailConfirmationExpires time.Time
+	Uploads                  Upload
 }
 
 func Hash(password string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 }
 
-func VerifyPassword(hashedPassword, password string) error {
-	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+func (user *User) VerifyPassword(password string) error {
+	return bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 }
 
 func (user *User) BeforeSave() error {
@@ -53,6 +44,7 @@ func (user *User) BeforeSave() error {
 	}
 
 	user.Password = string(hashedPassword)
+
 	return nil
 }
 

@@ -3,12 +3,12 @@ package errors
 import "net/http"
 
 type RestError struct {
-	Message string `json:"message"`
-	Status  int    `json:"status"`
-	Error   string `json:"error"`
+	Message interface{} `json:"message"`
+	Status  int         `json:"status"`
+	Error   string      `json:"error"`
 }
 
-func BadRequestError(message string) *RestError {
+func BadRequestError(message interface{}) *RestError {
 	return &RestError{
 		Message: message,
 		Status:  http.StatusBadRequest,
@@ -29,5 +29,13 @@ func InternalServerError(message string) *RestError {
 		Message: message,
 		Status:  http.StatusInternalServerError,
 		Error:   "internal_server_error",
+	}
+}
+
+func UnauthorizedError() *RestError {
+	return &RestError{
+		Message: "Unauthorized",
+		Status:  http.StatusUnauthorized,
+		Error:   "unauthorized",
 	}
 }
