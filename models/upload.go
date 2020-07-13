@@ -1,7 +1,5 @@
 package models
 
-import "github.com/jinzhu/gorm"
-
 type fileType string
 type visibility string
 
@@ -12,6 +10,7 @@ const (
 	unknown fileType = "unknown"
 	convert fileType = "convert"
 )
+
 const (
 	public   visibility = "public"
 	unlisted visibility = "unlisted"
@@ -21,11 +20,12 @@ const (
 )
 
 type Upload struct {
-	gorm.Model
-	Title            string    `json:"title" validate:"required"`
-	Description      string    `json:"description" validate:"required"`
-	OriginalFileName string    `json:"original_file_name"`
-	FileExtension    string    `json:"file_extension"`
+	Model
+	Title            string   `json:"title" validate:"required"`
+	Description      string   `json:"description" validate:"required"`
+	OriginalFileName string   `json:"original_file_name"`
+	FileExtension    string   `json:"file_extension"`
 	FileType         fileType `json:"file_type"`
-	UploaderID       uint      `json:"uploader_id" validate:"required"`
+	UploaderID       uint     `json:"uploader_id" validate:"required"`
+	User             User
 }

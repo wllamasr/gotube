@@ -33,7 +33,16 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusNotImplemented, gin.H{
-		"err": "no implemented",
+	token, err := user.CreateToken()
+
+	if err != nil {
+		restError := errors.InternalServerError("error creating the token")
+		c.JSON(restError.Status, restError)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"user": user,
+		"token": token,
 	})
 }
