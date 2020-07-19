@@ -12,6 +12,9 @@ var (
 	Client *gorm.DB
 )
 
+/*
+Create the SQL Client.
+ */
 func LoadClient() {
 	var (
 		username = os.Getenv("DB_USER")
@@ -21,7 +24,6 @@ func LoadClient() {
 		port     = os.Getenv("DB_PORT")
 	)
 	dataSourceName := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", username, password, host, port, schema)
-	//dataSourceName := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", host, port, username, schema, password)
 
 	var err error
 

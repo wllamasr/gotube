@@ -7,6 +7,16 @@ import (
 	"strings"
 )
 
+/*
+Validates if the value exist in the given table.field
+
+usage:
+```
+type User struct{
+	Email `validate:"unrepeated=users.email"`
+}
+```
+*/
 func ValidateUnrepeated(fl validator.FieldLevel) bool {
 	param := strings.Split(fl.Param(), ".")
 
