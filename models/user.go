@@ -23,7 +23,7 @@ type User struct {
 	LastName                 string    `json:"last_name" validate:"required" gorm:"not null"`
 	Email                    string    `json:"email" validate:"required,email" gorm:"type:varchar(100);unique_index;not null"`
 	Password                 string    `json:"password" gorm:"default:'asd'" validate:"required"`
-	Role                     role      `json:"role" gorm:"default:'user';size:255;type:enum('user', 'admin','moderator', 'support')"`
+	Role                     role      `json:"role" gorm:"default:'user';size:255;type:enum('user', 'admin','moderator', 'support')" validate:"oneof=user admin moderator support"`
 	EmailConfirmed           bool      `json:"email_confirmed" gorm:"default:false"`
 	EmailConfirmationToken   string    `json:"email_confirmation_token"`
 	EmailConfirmationExpires time.Time `json:"email_confirmation_expires"`

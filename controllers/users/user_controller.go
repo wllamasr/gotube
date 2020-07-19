@@ -1,6 +1,7 @@
 package users
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/wllamasr/golangtube/config/db"
 	"github.com/wllamasr/golangtube/models"
@@ -31,4 +32,17 @@ func CreateUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, user)
+}
+
+func ListUsers(c *gin.Context){
+	var users []models.User
+
+	if err := db.Client.Find(&users).Error; err != nil {
+		fmt.Println(users)
+		restErr := errors.BadRequestError(err.Error())
+		c.JSON(restErr.Status, restErr)
+		return
+	}
+
+	c.JSON(http.StatusOK, users)
 }
