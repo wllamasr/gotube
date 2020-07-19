@@ -2,6 +2,7 @@ package utils
 
 import (
 	"github.com/go-playground/validator/v10"
+	"github.com/wllamasr/golangtube/utils/custom_validations"
 )
 
 type ValidationError struct {
@@ -12,7 +13,7 @@ type ValidationError struct {
 //Validate struct
 func Validator(model interface{}) interface{} {
 	validate := validator.New()
-
+	registerCustomValidations(validate)
 	var errors []ValidationError
 
 	if err := validate.Struct(model); err != nil {
@@ -26,4 +27,8 @@ func Validator(model interface{}) interface{} {
 		return errors
 	}
 	return nil
+}
+
+func registerCustomValidations(validator *validator.Validate){
+	_ = validator.RegisterValidation("unrepeated", custom_validations.ValidateUnrepeated)
 }
