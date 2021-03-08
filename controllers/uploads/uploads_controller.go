@@ -64,7 +64,7 @@ func Create(c *gin.Context) {
 
 	upload.FileName = uuid_
 
-	err = c.SaveUploadedFile(file, fmt.Sprintf("./public/videos/%s", filename))
+	err = c.SaveUploadedFile(file, fmt.Sprintf("./uploads/videos/%s", filename))
 
 	if err != nil {
 		restErr := errors.InternalServerError(err.Error())
@@ -77,8 +77,10 @@ func Create(c *gin.Context) {
 
 	upload.User = user
 
-	upload.PublicURL = fmt.Sprintf("%s/public/videos/%s", os.Getenv("APP_URL"), uuid_)
+	upload.PublicURL = fmt.Sprintf("%s/uploads/videos/%s", os.Getenv("APP_URL"), uuid_)
 	upload.OriginalFileName = file.Filename
+
+	db.Client.Model(&user).Association("")
 
 	if err := db.Client.Create(&upload).Error; err != nil {
 		_ = os.Remove(fmt.Sprintf("./uploads/videos/%s", uuid_))

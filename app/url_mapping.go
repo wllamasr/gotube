@@ -1,19 +1,16 @@
 package app
 
 import (
-	"fmt"
 	"github.com/wllamasr/golangtube/app/middleware"
 	"github.com/wllamasr/golangtube/controllers/auth"
 	"github.com/wllamasr/golangtube/controllers/ping"
 	"github.com/wllamasr/golangtube/controllers/uploads"
 	"github.com/wllamasr/golangtube/controllers/users"
-	"net/http"
 )
 
 func mapUrls() {
-	fmt.Println(http.Dir("uploads"))
 	router.GET("/ping", ping.Ping)
-	router.Static("/public", "./public")
+	router.Static("/uploads", "./uploads")
 	api := router.Group("/api")
 	{
 		authRoutes := api.Group("/auth")
