@@ -1,11 +1,13 @@
-import {createStore, applyMiddleware} from 'redux'
+import {applyMiddleware, createStore} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import rootReducer from './reducer'
 
-const store = (initialState?: any) => {
-    initialState =
-        JSON.parse(window.localStorage.getItem('state') || '') || initialState
+const store = (initialState: any = {}) => {
+    const localState = localStorage.getItem('state')
+    
+    initialState = localState ? JSON.parse(localState) : initialState
+
     const middleware = [thunk]
 
     const store = createStore(

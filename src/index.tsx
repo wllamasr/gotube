@@ -6,13 +6,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from "./store"
-
+import 'antd/dist/antd.css';
 
 ReactDOM.render(
     <Provider store={store()}>
-        <React.StrictMode>
-            <App/>
-        </React.StrictMode>
+        <App/>
     </Provider>,
     document.getElementById('root')
 );
