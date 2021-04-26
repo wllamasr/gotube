@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
-import {Breadcrumb, Layout, Menu} from 'antd';
+import {Breadcrumb, Input, Layout, Menu} from 'antd';
 import {Routes} from './Routes'
 import './App.css'
-
 import {
     FileOutlined,
     LaptopOutlined,
@@ -11,6 +10,8 @@ import {
     NotificationOutlined,
     UserOutlined,
 } from '@ant-design/icons';
+
+const {Search} = Input;
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -22,18 +23,27 @@ function App() {
         setCollapsed(!collapsed)
     }
 
+    const onSearch = (value: string) => {
+        console.log("searching lel", value)
+    }
+
     return <Layout style={{minHeight: '100vh'}}>
-        <Header className="header">
-            <div className="logo"/>
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-                {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                    className: 'trigger',
-                    onClick: onCollapse,
-                })}
-                <Menu.Item key="1">nav 1</Menu.Item>
-                <Menu.Item key="2">nav 2</Menu.Item>
-                <Menu.Item key="3">nav 3</Menu.Item>
-            </Menu>
+        <Header style={{display: "flex", alignItems: "center", flexDirection: "row", justifyContent: "space-between"}}>
+            <div className="menu-items">
+                < div className="logo"/>
+                <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+                    {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                        className: 'trigger',
+                        onClick: onCollapse,
+                    })}
+                </Menu>
+            </div>
+            <div className="menu-items">
+                <Search placeholder="What are you looking for?" className={"searchbox"} onSearch={onSearch}/>
+            </div>
+            <div className="menu-items">
+
+            </div>
         </Header>
         <Layout>
             <Sider trigger={null} width={200} className="site-layout-background" collapsible collapsed={collapsed}
