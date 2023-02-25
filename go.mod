@@ -10,6 +10,5 @@ require (
 	github.com/jinzhu/gorm v1.9.12
 	github.com/joho/godotenv v1.3.0
 	github.com/mitchellh/mapstructure v1.3.2
-	github.com/pkg/errors v0.9.1 // indirect
-	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
+	golang.org/x/crypto v0.1.0
 )
